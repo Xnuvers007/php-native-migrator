@@ -163,7 +163,7 @@ class Bootstrap
      */
     public static function version(): string
     {
-        return '2.0.0';
+        return '2.1.0';
     }
 
     /**

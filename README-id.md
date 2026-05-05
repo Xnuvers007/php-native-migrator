@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="200" alt="PHP Native Migrator" style="filter: hue-rotate(220deg);"/>
-  <h1>🚀 PHP Native Migrator v2.0</h1>
+  <h1>🚀 PHP Native Migrator v2.1</h1>
   <p><b>Bawa kecanggihan Migration & Seeding ala Laravel ke proyek PHP murni Anda!</b></p>
   
   [![PHP Version](https://img.shields.io/badge/PHP-%E2%89%A5%208.0-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)

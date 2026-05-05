@@ -185,7 +185,7 @@ class Color
         $art = <<<'ASCII'
 
   ╔══════════════════════════════════════════════════════════╗
-  ║          PHP Native Migrator v2.0.0                      ║
+  ║          PHP Native Migrator v2.1.0                      ║
   ║          Database Migration Tool                         ║
   ║          github.com/Xnuvers007/php-native-migrator       ║
   ╚══════════════════════════════════════════════════════════╝
