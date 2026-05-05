@@ -1,0 +1,18 @@
+<?php
+// stubs/seeder.stub
+// Template seeder
+
+class UserSeeder
+{
+    /**
+     * Jalankan seeder
+     */
+    public function run(PDO $pdo): void
+    {
+        // Tulis kode seeder di sini
+        // Contoh:
+        // Database::insert('table_name', [
+        //     'column' => 'value',
+        // ]);
+    }
+}

@@ -1,0 +1,26 @@
+<?php
+// stubs/migration.update.stub
+// Template untuk migrasi ALTER TABLE
+
+class {{CLASS_NAME}}
+{
+    /**
+     * Jalankan migrasi - Modifikasi tabel
+     */
+    public function up(PDO $pdo): void
+    {
+        Schema::table('{{TABLE_NAME}}', function (Blueprint $table) {
+            // Tambah/modifikasi kolom di sini...
+        });
+    }
+
+    /**
+     * Batalkan migrasi
+     */
+    public function down(PDO $pdo): void
+    {
+        Schema::table('{{TABLE_NAME}}', function (Blueprint $table) {
+            // Kembalikan perubahan di sini...
+        });
+    }
+}

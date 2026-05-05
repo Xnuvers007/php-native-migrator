@@ -1,0 +1,22 @@
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+
+.git/

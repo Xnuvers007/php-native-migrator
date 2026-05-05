@@ -1,0 +1,28 @@
+<?php
+// stubs/migration.create.stub
+// Template untuk migrasi CREATE TABLE
+
+class {{CLASS_NAME}}
+{
+    /**
+     * Jalankan migrasi - Buat tabel baru
+     */
+    public function up(PDO $pdo): void
+    {
+        Schema::create('{{TABLE_NAME}}', function (Blueprint $table) {
+            $table->id();
+
+            // Tambahkan kolom di sini...
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Batalkan migrasi - Hapus tabel
+     */
+    public function down(PDO $pdo): void
+    {
+        Schema::dropIfExists('{{TABLE_NAME}}');
+    }
+}

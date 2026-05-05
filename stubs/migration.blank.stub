@@ -1,0 +1,22 @@
+<?php
+// stubs/migration.blank.stub
+// Template migrasi kosong
+
+class {{CLASS_NAME}}
+{
+    /**
+     * Jalankan migrasi
+     */
+    public function up(PDO $pdo): void
+    {
+        // Tulis kode migrasi di sini
+    }
+
+    /**
+     * Batalkan migrasi
+     */
+    public function down(PDO $pdo): void
+    {
+        // Tulis kode untuk membatalkan migrasi
+    }
+}
