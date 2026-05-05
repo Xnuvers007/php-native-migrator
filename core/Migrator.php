@@ -32,25 +32,18 @@ class Migrator
      */
     private function createMigrationsTable(): void
     {
+        // Pastikan Schema Builder sudah terinisialisasi
         $driver = getenv('DB_DRIVER') ?: 'mysql';
+        Schema::init($this->pdo, $driver);
 
-        if ($driver === 'sqlite') {
-            $sql = "CREATE TABLE IF NOT EXISTS migrations (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                migration VARCHAR(255) UNIQUE NOT NULL,
-                batch INTEGER NOT NULL,
-                executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )";
-        } else {
-            $sql = "CREATE TABLE IF NOT EXISTS migrations (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                migration VARCHAR(255) UNIQUE NOT NULL,
-                batch INT NOT NULL,
-                executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+        if (!Schema::hasTable('migrations')) {
+            Schema::create('migrations', function (Blueprint $table) {
+                $table->id();
+                $table->string('migration', 255)->unique();
+                $table->integer('batch');
+                $table->timestamp('executed_at')->useCurrent();
+            });
         }
-
-        $this->pdo->exec($sql);
     }
 
     /**
