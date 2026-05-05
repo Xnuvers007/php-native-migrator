@@ -28,6 +28,7 @@ class Schema
 
         self::$grammar = match ($driver) {
             'sqlite' => new SQLiteGrammar(),
+            'pgsql', 'postgres', 'postgresql' => new PostgresGrammar(),
             default  => new MySqlGrammar(),
         };
     }
@@ -43,6 +44,7 @@ class Schema
             $driver = getenv('DB_DRIVER') ?: 'mysql';
             self::$grammar = match ($driver) {
                 'sqlite' => new SQLiteGrammar(),
+                'pgsql', 'postgres', 'postgresql' => new PostgresGrammar(),
                 default  => new MySqlGrammar(),
             };
         }

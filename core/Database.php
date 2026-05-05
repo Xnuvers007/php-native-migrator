@@ -23,6 +23,7 @@ class Database
 
             self::$pdo = match (self::$driver) {
                 'sqlite' => self::connectSQLite(),
+                'pgsql', 'postgres', 'postgresql' => self::connectPostgreSQL(),
                 default  => self::connectMySQL(),
             };
 
@@ -102,6 +103,39 @@ class Database
             throw new \RuntimeException(
                 "Koneksi SQLite Gagal: " . $e->getMessage() . "\n" .
                 "Path: $path\n"
+            );
+        }
+    }
+
+    /**
+     * Koneksi ke PostgreSQL
+     */
+    private static function connectPostgreSQL(): PDO
+    {
+        $host   = getenv('DB_HOST') ?: '127.0.0.1';
+        $port   = getenv('DB_PORT') ?: '5432';
+        $dbname = getenv('DB_DATABASE');
+        $user   = getenv('DB_USERNAME');
+        $pass   = getenv('DB_PASSWORD') ?: '';
+
+        if (!$dbname || !$user) {
+            throw new \RuntimeException(
+                "Error: DB_DATABASE atau DB_USERNAME kosong!\n" .
+                "Pastikan sudah diisi di file .env\n"
+            );
+        }
+
+        $dsn = "pgsql:host={$host};port={$port};dbname={$dbname}";
+
+        try {
+            return new PDO($dsn, $user, $pass, [
+                PDO::ATTR_TIMEOUT    => 5,
+                PDO::ATTR_PERSISTENT => false,
+            ]);
+        } catch (PDOException $e) {
+            throw new \RuntimeException(
+                "Koneksi PostgreSQL Gagal: " . $e->getMessage() . "\n" .
+                "Host: $host:$port | User: $user\n"
             );
         }
     }

@@ -1,0 +1,88 @@
+name: Migrator Tests
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: ['8.0', '8.1', '8.2', '8.3']
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: migrator_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: migrator_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: pdo, pdo_mysql, pdo_sqlite, pdo_pgsql
+
+    - name: Configure SQLite Environment
+      run: |
+        cp .env.example .env
+        sed -i 's/DB_DRIVER=mysql/DB_DRIVER=sqlite/g' .env
+        sed -i 's/DB_DATABASE=php_native_migrator/DB_DATABASE=database.sqlite/g' .env
+        touch database.sqlite
+    
+    - name: Run SQLite Tests
+      run: |
+        php artisan make:migration create_test_table
+        php artisan make:seeder TestSeeder
+        php artisan migrate:fresh --seed
+
+    - name: Configure MySQL Environment
+      run: |
+        sed -i 's/DB_DRIVER=sqlite/DB_DRIVER=mysql/g' .env
+        sed -i 's/DB_DATABASE=database.sqlite/DB_DATABASE=migrator_test/g' .env
+        sed -i 's/DB_USERNAME=root/DB_USERNAME=root/g' .env
+        sed -i 's/DB_PASSWORD=/DB_PASSWORD=root/g' .env
+
+    - name: Run MySQL Tests
+      run: |
+        php artisan migrate:fresh --seed
+        php artisan migrate:rollback
+        php artisan migrate:reset
+
+    - name: Configure PostgreSQL Environment
+      run: |
+        sed -i 's/DB_DRIVER=mysql/DB_DRIVER=pgsql/g' .env
+        sed -i 's/DB_PORT=3306/DB_PORT=5432/g' .env
+
+    - name: Run PostgreSQL Tests
+      run: |
+        php artisan migrate:fresh --seed
+        php artisan migrate:refresh

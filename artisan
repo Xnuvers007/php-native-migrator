@@ -28,7 +28,7 @@ if (file_exists($envFile)) {
 } else {
     // Cek apakah command memerlukan database
     $command = $argv[1] ?? null;
-    $nonDbCommands = ['help', '--help', '-h', 'list', 'version', '--version', '-v', 'make:migration', 'make:seeder'];
+    $nonDbCommands = ['help', '--help', '-h', 'list', 'version', '--version', '-v', 'make:migration', 'make:seeder', 'make:model'];
 
     if (!in_array($command, $nonDbCommands, true)) {
         echo Color::badgeError('ERROR') . ' ' . Color::error("File .env tidak ditemukan!") . "\n";

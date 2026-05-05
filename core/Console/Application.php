@@ -22,6 +22,7 @@ class ConsoleApplication
         'migrate:status'     => ['desc' => 'Tampilkan status semua migrasi', 'group' => 'Migration'],
         'make:migration'     => ['desc' => 'Buat file migrasi baru', 'group' => 'Generator'],
         'make:seeder'        => ['desc' => 'Buat file seeder baru', 'group' => 'Generator'],
+        'make:model'         => ['desc' => 'Buat file model/entity baru', 'group' => 'Generator'],
         'db:seed'            => ['desc' => 'Jalankan database seeder', 'group' => 'Database'],
         'db:wipe'            => ['desc' => 'Hapus semua tabel dari database', 'group' => 'Database'],
         'list'               => ['desc' => 'Tampilkan daftar semua command', 'group' => 'Help'],
@@ -64,6 +65,7 @@ class ConsoleApplication
                 'migrate:status'     => $this->handleStatus(),
                 'make:migration'     => $this->handleMakeMigration($argument),
                 'make:seeder'        => $this->handleMakeSeeder($argument),
+                'make:model'         => $this->handleMakeModel($argument),
                 'db:seed'            => $this->handleDbSeed(),
                 'db:wipe'            => $this->handleDbWipe(),
                 'list'               => $this->handleList(),
@@ -131,7 +133,8 @@ class ConsoleApplication
     {
         $migrator = new Migrator($this->basePath);
         $steps = (int)$this->getOption('step', 0);
-        $migrator->rollback($steps);
+        $file = $this->getOption('file', null);
+        $migrator->rollback($steps, $file);
     }
 
     private function handleReset(): void
@@ -202,6 +205,22 @@ class ConsoleApplication
 
         echo "\n" . Color::success("  ✓ File seeder berhasil dibuat: ") .
              Color::info("seeders/$fileName") . "\n\n";
+    }
+
+    private function handleMakeModel(?string $name = null): void
+    {
+        $name = $name ?? $this->getOption('name');
+
+        if (!$name) {
+            echo Color::error("\n  ✖ Nama model harus diisi!") . "\n";
+            echo Color::muted("  Contoh: php artisan make:model User") . "\n\n";
+            return;
+        }
+
+        $fileName = ModelGenerator::generate($this->basePath, $name);
+
+        echo "\n" . Color::success("  ✓ File model berhasil dibuat: ") .
+             Color::info("models/$fileName") . "\n\n";
     }
 
     private function handleDbSeed(): void

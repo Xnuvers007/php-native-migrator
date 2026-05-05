@@ -20,6 +20,8 @@ class Bootstrap
         'Database'              => 'core/Database.php',
         'Migrator'              => 'core/Migrator.php',
         'Seeder'                => 'core/Seeder.php',
+        'Faker'                 => 'core/Faker.php',
+        'ModelGenerator'        => 'core/ModelGenerator.php',
 
         // Schema
         'Schema'                => 'core/Schema/Schema.php',
@@ -29,6 +31,7 @@ class Bootstrap
         'GrammarInterface'      => 'core/Schema/Grammar/GrammarInterface.php',
         'MySqlGrammar'          => 'core/Schema/Grammar/MySqlGrammar.php',
         'SQLiteGrammar'         => 'core/Schema/Grammar/SQLiteGrammar.php',
+        'PostgresGrammar'       => 'core/Schema/Grammar/PostgresGrammar.php',
 
         // Console
         'ConsoleApplication'    => 'core/Console/Application.php',

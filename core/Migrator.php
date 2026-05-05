@@ -143,14 +143,25 @@ class Migrator
     }
 
     /**
-     * Rollback migrasi terakhir (per batch)
+     * Rollback migrasi terakhir (per batch atau per file)
      * Command: php artisan migrate:rollback
      *
      * @param int $steps Jumlah step yang akan di-rollback (0 = satu batch)
+     * @param string|null $specificFile Nama file spesifik untuk dirollback
      */
-    public function rollback(int $steps = 0): void
+    public function rollback(int $steps = 0, ?string $specificFile = null): void
     {
-        if ($steps > 0) {
+        if ($specificFile) {
+            // Cek apakah file tersebut sudah dieksekusi
+            $appliedMigrations = $this->getAppliedMigrations();
+            $baseName = pathinfo($specificFile, PATHINFO_FILENAME);
+            
+            if (!isset($appliedMigrations[$baseName])) {
+                echo Color::error("  ✖ Migrasi [$baseName] belum pernah dieksekusi.") . "\n";
+                return;
+            }
+            $toRollback = [$baseName];
+        } elseif ($steps > 0) {
             // Rollback berdasarkan jumlah file
             $migrations = $this->getAllMigrationsReverse();
             $toRollback = array_slice($migrations, 0, $steps);
